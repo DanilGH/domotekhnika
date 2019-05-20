@@ -28,7 +28,7 @@ $app = new Illuminate\Foundation\Application(
 
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,
-    App\Interfaces\Http\Kernel::class
+    App\Interfaces\Api\Kernel::class
 );
 
 $app->singleton(
