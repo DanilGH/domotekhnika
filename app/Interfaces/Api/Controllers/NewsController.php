@@ -18,9 +18,9 @@ class NewsController extends Controller
             ->response()->setStatusCode(200);
     }
 
-    public function show(NewsServiceRepository $newsServiceRepository, $id)
+    public function show(NewsServiceRepository $newsServiceRepository, $slug)
     {
-        $news = $newsServiceRepository->getById($id);
+        $news = $newsServiceRepository->getBySlug($slug);
         return $this->response(new NewsResource($news), 'success', 'Успешно')
             ->response()->setStatusCode(200);
     }

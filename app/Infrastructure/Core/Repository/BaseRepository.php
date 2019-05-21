@@ -40,6 +40,19 @@ abstract class BaseRepository implements Repository
         return $query->find($id);
     }
     /**
+     * Get resources by a where clause
+     * @param  string $column
+     * @param  mixed $value
+     * @param  array $options
+     * @return Collection
+     */
+    public function getWhereFirst($column, $value, array $options = [])
+    {
+        $query = $this->createBaseBuilder($options);
+        $query->where($column, $value);
+        return $query->first();
+    }
+    /**
      * Get all
      */
     public function getPaginate(array $options = [])

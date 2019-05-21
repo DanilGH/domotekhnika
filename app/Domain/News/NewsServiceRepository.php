@@ -28,6 +28,15 @@ class NewsServiceRepository extends BaseServiceRepository
         return $news;
     }
 
+    public function getBySlug(string $slug)
+    {
+        $news = $this->repository->getWhereFirst('slug', $slug);
+        if (is_null($news)) {
+            throw new ModelNotFoundException();
+        }
+        return $news;
+    }
+
     public function create($data)
     {
         $news = $this->repository->create($data);
