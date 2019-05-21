@@ -14,9 +14,9 @@ class NewsServiceRepository extends BaseServiceRepository
         $this->repository = $newsRepository;
     }
 
-    public function getAll($options = [])
+    public function getAllPaginate($options = [])
     {
-        return $this->repository->get($options);
+        return $this->repository->getPaginate($options);
     }
 
     public function getById($id)
@@ -26,5 +26,24 @@ class NewsServiceRepository extends BaseServiceRepository
             throw new ModelNotFoundException();
         }
         return $news;
+    }
+
+    public function create($data)
+    {
+        $news = $this->repository->create($data);
+        return $news;
+    }
+
+    public function update($id, $data)
+    {
+        $news = $this->repository->getById($id);
+        $this->repository->update($news, $data);
+        return $news;
+    }
+
+    public function delete($id)
+    {
+        $this->repository->delete($id);
+        return true;
     }
 }

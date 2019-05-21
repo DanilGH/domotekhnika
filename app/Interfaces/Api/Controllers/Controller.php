@@ -2,8 +2,8 @@
 
 namespace App\Interfaces\Api\Controllers;
 
-use App\Infrastructure\Core\Interfaces\Resource;
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -13,7 +13,7 @@ class Controller extends BaseController implements AController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function response(Resource $resource, $status = '', $message = '')
+    public function response(JsonResource $resource, $status = '', $message = '') :JsonResource
     {
         return $resource->additional([
             'status' => $status,

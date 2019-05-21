@@ -7,7 +7,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 
 class News extends Model
 {
-    protected $fillable = ['title', 'text', 'short_text', 'date_publish', 'status', 'image_file_name'];
+    protected $fillable = ['title', 'text', 'short_text', 'slug', 'date_publish', 'status', 'image_file_name'];
 
     protected $hidden = ['created_at', 'updated_at'];
 

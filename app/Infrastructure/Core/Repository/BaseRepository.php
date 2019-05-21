@@ -23,7 +23,7 @@ abstract class BaseRepository implements Repository
      * @param  array $options
      * @return Collection
      */
-    public function get(array $options = [])
+    public function get(array $options = []) :Collection
     {
         $query = $this->createBaseBuilder($options);
         return $query->get();
@@ -38,6 +38,28 @@ abstract class BaseRepository implements Repository
     {
         $query = $this->createBaseBuilder($options);
         return $query->find($id);
+    }
+    /**
+     * Get all
+     */
+    public function getPaginate(array $options = [])
+    {
+        $query = $this->createBaseBuilder($options);
+        $query->orderBy(
+            request('order_column', $this->getCreatedAtColumn()),
+            request('order_direction', 'desc')
+        );
+        return $query->paginate(request('limit', 10));
+    }
+    /**
+     * Get the name of the "created at" column.
+     * More info to https://laravel.com/docs/5.4/eloquent#defining-models
+     * @return string
+     */
+    protected function getCreatedAtColumn()
+    {
+        $model = $this->model;
+        return ($model::CREATED_AT) ? $model::CREATED_AT : 'created_at';
     }
     /**
      * Creates a new query builder with Optimus options set
@@ -56,5 +78,25 @@ abstract class BaseRepository implements Repository
     protected function createQueryBuilder()
     {
         return $this->model->newQuery();
+    }
+    /**
+     * Delete a resource by its primary key
+     * @param  mixed $id
+     * @return void
+     */
+    public function delete($id)
+    {
+        $query = $this->createQueryBuilder();
+        $query->where($this->getPrimaryKey($query), $id);
+        $query->delete();
+    }
+    /**
+     * Get primary key name of the underlying model
+     * @param  Builder $query
+     * @return string
+     */
+    protected function getPrimaryKey(Builder $query)
+    {
+        return $query->getModel()->getKeyName();
     }
 }

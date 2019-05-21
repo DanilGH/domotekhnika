@@ -3,6 +3,7 @@
 namespace App\Interfaces\Api\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class NewsRequest extends FormRequest
 {
@@ -14,9 +15,9 @@ class NewsRequest extends FormRequest
 
     public function rules()
     {
-        /*
-         * Определяем правила валидации для новостей
-         */
+    /**
+     * Определяем правила валидации для новостей
+     */
         $rules = [
             'title' => 'required|string|unique:news,title',
             'text' => 'required',
@@ -26,15 +27,21 @@ class NewsRequest extends FormRequest
             'image_file_name' => 'required|string'
         ];
 
-        /*
-         * Исходя от запроса правила валидации для новостей могут немного отличаться
-         */
+    /**
+     * Исходя от запроса правила валидации для новостей могут немного отличаться
+     */
         switch ($this->getMethod())
         {
             case 'POST':
                 return $rules;
             case 'PUT':
-                return $rules;
+                return [
+                    'id' => 'required|integer|exists:news,id',
+                    'title' => [
+                        'required',
+                        Rule::unique('news')->ignore($this->title, 'title')
+                    ]
+                ] + $rules;
             case 'PATCH':
                 return $rules;
             case 'DELETE':
@@ -45,7 +52,7 @@ class NewsRequest extends FormRequest
         return $rules;
     }
 
-    /*
+    /**
      * Переопределяем сообщения с ошибками валидации
      */
     public function messages()
@@ -58,12 +65,9 @@ class NewsRequest extends FormRequest
 
     public function all($keys = null)
     {
-        // return $this->all();
         $data = parent::all($keys);
         switch ($this->getMethod())
         {
-            // case 'PUT':
-            // case 'PATCH':
             case 'DELETE':
                 $data['id'] = $this->route('news');
                 break;
