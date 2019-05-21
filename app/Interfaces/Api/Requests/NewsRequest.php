@@ -58,8 +58,8 @@ class NewsRequest extends FormRequest
     public function messages()
     {
         return [
-            'date.required' => 'Данные обязательны',
-            'date.unique'  => 'Это поле должно быть уникально',
+            'title.unique' => 'Такое поле title уже существует',
+            'status.in'  => 'Это поле может содержать только 1 или 0',
         ];
     }
 

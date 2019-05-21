@@ -8,8 +8,10 @@ class ValidationErrorResource extends ErrorResource
     {
         $data = [];
         foreach ($this->resource as $item => $value){
-            $data['filed'] = $item;
-            $data['rule'] = $value[0];
+            $data[] = [
+                'filed' => $item,
+                'rule' => $value[0]
+            ];
         }
         $this->resource = $data;
         return parent::toArray($request);
