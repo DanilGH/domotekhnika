@@ -3,6 +3,7 @@
 namespace App\Application\Exceptions;
 
 use App\Interfaces\Api\Resources\Error\ErrorResource;
+use App\Interfaces\Api\Resources\Error\ValidationErrorResource;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -30,8 +31,8 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($exception instanceof ValidationException) {
-            return (new ErrorResource([$exception->getMessage()], 'FieldInvalid', 'Поле содержит недопустимое значение'))
-                ->response()->setStatusCode(404);
+            return (new ValidationErrorResource($exception->errors(), 'FieldInvalid', 'Поле содержит недопустимое значение'))
+                ->response()->setStatusCode(422);
         }
 
         if ($exception instanceof ModelNotFoundException) {
