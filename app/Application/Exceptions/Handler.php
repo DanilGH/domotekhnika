@@ -2,11 +2,11 @@
 
 namespace App\Application\Exceptions;
 
-use App\Infrastructure\Resources\BaseResource;
+use App\Interfaces\Api\Resources\Error\ErrorResource;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use MongoDB\Driver\Exception\ServerException;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -29,19 +29,24 @@ class Handler extends ExceptionHandler
 
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof ValidationException) {
+            return (new ErrorResource([$exception->getMessage()], 'FieldInvalid', 'Поле содержит недопустимое значение'))
+                ->response()->setStatusCode(404);
+        }
+
         if ($exception instanceof ModelNotFoundException) {
-            return (new BaseResource(null, 'RecordNotFound', 'Запись не найдена'))
+            return (new ErrorResource([$exception->getMessage()], 'RecordNotFound', 'Запись не найдена'))
                 ->response()->setStatusCode(404);
         }
 
         if ($exception instanceof HttpException or $exception instanceof NotFoundHttpException) {
-            return (new BaseResource(null, 'UrlNotFound', 'URL не найден'))
+            return (new ErrorResource([$exception->getMessage()], 'UrlNotFound', 'URL не найден'))
                 ->response()->setStatusCode(404);
         }
 
         if ($exception instanceof Exception)
         {
-            $res = new BaseResource(null, 'GeneralInternalError', 'Произошла ошибка');
+            $res = new ErrorResource([$exception->getMessage()], 'GeneralInternalError', 'Произошла ошибка');
             return $res->response()->setStatusCode(500);
         }
 

@@ -6,21 +6,12 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class NewsRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         /*
@@ -32,7 +23,7 @@ class NewsRequest extends FormRequest
             'short_text' => 'required|string|max:255',
             'date_publish' => 'required|date',
             'status' => 'required|in:1,0',
-            'image_file_name' => 'required|string|unique:news,title'
+            'image_file_name' => 'required|string'
         ];
 
         /*
@@ -64,4 +55,20 @@ class NewsRequest extends FormRequest
             'date.unique'  => 'Это поле должно быть уникально',
         ];
     }
+
+    public function all($keys = null)
+    {
+        // return $this->all();
+        $data = parent::all($keys);
+        switch ($this->getMethod())
+        {
+            // case 'PUT':
+            // case 'PATCH':
+            case 'DELETE':
+                $data['id'] = $this->route('news');
+                break;
+        }
+        return $data;
+    }
+
 }
