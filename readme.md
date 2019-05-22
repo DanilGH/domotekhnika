@@ -6,9 +6,24 @@
 
 ## Домотехника тестовое задание
 
-Для просмотра кода перейдите по ссылке:
+Для выполнения запросов я разместил на hodger.ru все необходимое API:
 
-- [GitHab](https://github.com/DanilGH/domotekhnika).
+- [GitHab](https://github.com/DanilGH/domotekhnika)
+
+Получить все новости
+- GET -> [hodger.ru/api/v1/news](https://hodger.ru/api/v1/new)
+
+Получить одну новость по slug
+- GET -> https://hodger.ru/api/v1/news/[slug]
+
+Создать одну новость
+- POST -> https://hodger.ru/api/v1/news
+
+Обновить одну новость по id
+- PUT -> https://hodger.ru/api/v1/news/[id]
+
+Удалить одну новость по id
+- DELETE -> https://hodger.ru/api/v1/news/[id]
 
 Сервер базы данных расположен на VPS.
 
