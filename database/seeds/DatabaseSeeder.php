@@ -1,6 +1,6 @@
 <?php
 
-use App\News;
+use App\Domain\News\News;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
 
